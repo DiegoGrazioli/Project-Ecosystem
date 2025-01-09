@@ -15,6 +15,7 @@ script = ExtResource("1_l77ko")
 
 [node name="WorldCollision" type="CollisionShape2D" parent="."]
 position = Vector2(8.63193, 5.97987)
+scale = Vector2(4, 4)
 shape = SubResource("RectangleShape2D_ar121")
 debug_color = Color(0.395566, 0.609891, 0, 0.42)
 
@@ -30,16 +31,17 @@ texture = ExtResource("1_ish3j")
 light_mask = 0
 visibility_layer = 0
 position = Vector2(8.44034, 6.1315)
+scale = Vector2(4, 4)
 shape = SubResource("RectangleShape2D_xek8y")
 
 [node name="Info" type="Control" parent="."]
 visible = false
 layout_mode = 3
 anchors_preset = 0
-offset_left = 0.504471
-offset_top = -24.2942
-offset_right = 128.504
-offset_bottom = 101.706
+offset_left = 8.63191
+offset_top = -38.8862
+offset_right = 136.631
+offset_bottom = 87.114
 
 [node name="Rectangle" type="Sprite2D" parent="Info"]
 modulate = Color(1, 1, 1, 0.278431)

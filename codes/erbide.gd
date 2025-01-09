@@ -39,6 +39,13 @@ func _on_timer_timeout() -> void:
 	$Info/Control/VBoxContainer/EtaContainer/EtaFill.text = str(age[0]) + ", " + str(age[1]) + ", " + str(age[2])
 	$Info/Control/VBoxContainer/FameContainer/FameFill.text = str(hunger) + "/10"
 	$Info/Control/VBoxContainer/VitaContainer/HPFill.text = str(life) + "/100"
+	
+	#aggiorna dimensioni
+	var s = age[1] * 60 + age[0] * 600 + age[2]
+	var mod = float(sqrt(s) + 1)
+	if mod < 16:
+		$Skin.scale.x = mod * 4
+		$Skin.scale.y = mod * 4
 
 	#movimento
 	var movement
