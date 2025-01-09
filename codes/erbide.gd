@@ -1,4 +1,5 @@
-extends CharacterBody2D
+class_name creature extends CharacterBody2D
+
 
 @export var existence = true
 
@@ -12,7 +13,9 @@ var pos = Vector2(position.x, position.y)
 var speed = 500
 
 var hungry = false
-var secs = false
+var secs = false #chi sa, sa
+
+var vegetables_in_area = []
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -55,11 +58,21 @@ func _on_timer_timeout() -> void:
 		else:
 			movement = Vector2(randi_range(-1, 1), randi_range(-1, 1))
 		velocity = movement * speed
+		
+	if vegetables_in_area.size() != 0 and hungry:
+		movement = Vector2(vegetables_in_area[0].position.x, vegetables_in_area[0].position.y).normalized()
+		velocity = movement * speed
+	elif vegetables_in_area.size() == 0 and hungry:
+		movement = Vector2(0, 0)
+		velocity = movement * speed
 	move_and_slide()
-
+	
+	print(vegetables_in_area.size())
+	
 	#decadimento della fame
 	if hunger < 3:
-		hungry = true								################################AGGIUNGI "IN CERCA DI CIBO"
+		hungry = true
+	
 	
 	if randi_range(0, 1) == 0 and hunger > 0:
 		hunger -= 0.5
@@ -73,3 +86,22 @@ func _on_hover_mouse_entered() -> void:
 
 func _on_hover_mouse_exited() -> void:
 	$Info.visible = false
+
+
+func _on_area_2d_body_entered(body: Node2D) -> void:
+	if body is pianta:
+		vegetables_in_area.append(body)
+
+
+func _on_area_2d_body_exited(body: Node2D) -> void:
+	if body is foglia:
+		vegetables_in_area.erase(body)
+
+
+func _on_eat_area_body_entered(body: Node2D) -> void:
+	if body is foglia and hunger < 3 and $EatArea/Cooldown.is_stopped():
+		vegetables_in_area.erase(body)
+		body.queue_free()
+		$EatArea/Cooldown.start()
+		hunger += 5
+		hungry = false

@@ -1,4 +1,5 @@
 extends Node2D
+class_name foglia
 
 @onready var foglia_solaria: PackedScene = preload("res://scenes/foglia_solaria.tscn")
 
@@ -36,8 +37,12 @@ func _on_timer_timeout() -> void:
 		
 		foglia.position = foglia_pos
 		foglia.predisposition = foglia_pos
-		$Leaves.add_child(foglia)
+		if randi_range(0, 4) == 0:
+			foglia.growth = false
+		else:
+			$Leaves.add_child(foglia)
 		leaves += 1
-		if randi_range(0, 4) != 0:
+		
+		if randi_range(0, 8) != 0:
 			fertility = false
 			$Skin.modulate = Color.html("#cbd94e")

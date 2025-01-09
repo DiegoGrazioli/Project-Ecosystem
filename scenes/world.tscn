@@ -41,10 +41,10 @@ size_flags_horizontal = 8
 autostart = true
 
 [node name="Erbide" parent="." instance=ExtResource("4_4r32y")]
-position = Vector2(10518, 5261)
+position = Vector2(10189, 5184)
 
 [node name="Solaria" parent="." instance=ExtResource("5_wjah2")]
-position = Vector2(10674, 5329)
+position = Vector2(10847, 5470)
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Timer" to="Camera2D/UI" method="_on_timer_timeout"]

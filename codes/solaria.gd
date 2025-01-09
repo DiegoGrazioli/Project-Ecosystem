@@ -1,6 +1,9 @@
 extends CharacterBody2D
 
+class_name pianta
+
 @export var existence = true
+
 
 @onready var foglia_solaria: PackedScene = preload("res://scenes/foglia_solaria.tscn")
 
@@ -28,7 +31,6 @@ func _process(delta: float) -> void:
 		foglia.position = foglia_pos
 		foglia.predisposition = foglia_pos
 		$Leaves.add_child(foglia)
-		print(str(foglia.position.x) + ", " + str(foglia.position.y))
 		leaves += 1
 	
 	$Timer.wait_time = Globals.wait_time
@@ -42,8 +44,6 @@ func _on_timer_timeout() -> void:
 		if age[1] == 10:
 			age[1] = 0
 			age[0] += 1
-
-
 
 	#aggiorna info
 	$Info/Control/VBoxContainer/EtaContainer/EtaFill.text = str(age[0]) + ", " + str(age[1]) + ", " + str(age[2])
