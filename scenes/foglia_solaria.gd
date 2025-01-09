@@ -5,7 +5,8 @@ extends Node2D
 var predisposition = Vector2()
 var age = 0
 var leaves = 0
-var fertility = true
+var fertility = false
+var growth = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -19,6 +20,13 @@ func _process(delta: float) -> void:
 
 func _on_timer_timeout() -> void:
 	age += 1
+	if growth:
+		$Skin.scale.x += 1
+		$Skin.scale.y += 1
+	
+	if $Skin.scale.x == 16:
+		growth = false
+		fertility = true
 	
 	if randi_range(0, 24 + leaves * 2) == 0 and fertility:
 		var foglia = foglia_solaria.instantiate()
@@ -30,5 +38,6 @@ func _on_timer_timeout() -> void:
 		foglia.predisposition = foglia_pos
 		$Leaves.add_child(foglia)
 		leaves += 1
-		if randi_range(0, 1) == 0:
+		if randi_range(0, 4) != 0:
 			fertility = false
+			$Skin.modulate = Color.html("#cbd94e")

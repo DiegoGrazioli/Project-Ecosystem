@@ -1,5 +1,7 @@
 extends Node2D
 
+var speed = 1
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if Globals.world_cycles == null and Globals.world_minutes == null and Globals.world_seconds == null:
@@ -18,13 +20,13 @@ func _process(delta: float) -> void:
 		$Camera2D.scale = Vector2(1 / $Camera2D.zoom.x, 1 / $Camera2D.zoom.y)
 	
 	if Input.is_action_pressed("su"):
-		$Camera2D.position.y -= 1
+		$Camera2D.position.y -= 1 * speed
 	if Input.is_action_pressed("giù"):
-		$Camera2D.position.y += 1
+		$Camera2D.position.y += 1 * speed
 	if Input.is_action_pressed("destra"):
-		$Camera2D.position.x += 1
+		$Camera2D.position.x += 1 * speed
 	if Input.is_action_pressed("sinistra"):
-		$Camera2D.position.x -= 1
+		$Camera2D.position.x -= 1 * speed
 	
 	if Input.is_action_just_pressed("velocizza tempo"):
 		Globals.wait_time -= 0.05
@@ -32,6 +34,11 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("rallenta tempo"):
 		Globals.wait_time += 0.05
 		$Timer.wait_time = Globals.wait_time
+		
+	if Input.is_action_just_pressed("accelera"):
+		speed += 1
+	if Input.is_action_just_pressed("decelera"):
+		speed -= 1
 
 func _on_timer_timeout() -> void:
 	Globals.world_seconds += 1
