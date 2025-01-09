@@ -1,0 +1,107 @@
+[gd_scene load_steps=5 format=3 uid="uid://daoryq86wit4j"]
+
+[ext_resource type="Script" path="res://codes/solaria.gd" id="1_du3ho"]
+[ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_kqpw7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hglyt"]
+size = Vector2(6, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_og6fs"]
+size = Vector2(6, 6)
+
+[node name="Solaria" type="CharacterBody2D"]
+position = Vector2(568, 320)
+script = ExtResource("1_du3ho")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0.156863, 0.196078, 0.0470588, 1)
+scale = Vector2(24, 24)
+texture = ExtResource("1_kqpw7")
+
+[node name="WorldCollision" type="CollisionShape2D" parent="."]
+position = Vector2(-9.53674e-07, 0)
+scale = Vector2(4, 4)
+shape = SubResource("RectangleShape2D_hglyt")
+debug_color = Color(0.395566, 0.609891, 0, 0.42)
+
+[node name="Hover" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hover"]
+light_mask = 0
+visibility_layer = 0
+scale = Vector2(4, 4)
+shape = SubResource("RectangleShape2D_og6fs")
+
+[node name="Info" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 8.63191
+offset_top = -38.8862
+offset_right = 136.631
+offset_bottom = 87.114
+
+[node name="Rectangle" type="Sprite2D" parent="Info"]
+modulate = Color(1, 1, 1, 0.278431)
+position = Vector2(60.4118, -61.8696)
+scale = Vector2(128, 128)
+texture = ExtResource("1_kqpw7")
+
+[node name="Control" type="Control" parent="Info"]
+anchors_preset = 0
+offset_left = -3.0
+offset_top = -126.0
+offset_right = 125.0
+offset_bottom = 2.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Info/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SpecieContainer" type="HBoxContainer" parent="Info/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Specie" type="Label" parent="Info/Control/VBoxContainer/SpecieContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Specie:"
+
+[node name="SpecieFill" type="Label" parent="Info/Control/VBoxContainer/SpecieContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "ADD HERE"
+
+[node name="DietaContainer" type="HBoxContainer" parent="Info/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Dieta" type="Label" parent="Info/Control/VBoxContainer/DietaContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Dieta:"
+
+[node name="DietaFill" type="Label" parent="Info/Control/VBoxContainer/DietaContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "ADD HERE"
+
+[node name="EtaContainer" type="HBoxContainer" parent="Info/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Eta" type="Label" parent="Info/Control/VBoxContainer/EtaContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Età:"
+
+[node name="EtaFill" type="Label" parent="Info/Control/VBoxContainer/EtaContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "ADD HERE"
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[node name="Leaves" type="Node2D" parent="."]

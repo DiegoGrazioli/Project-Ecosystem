@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://durkj4pqe32di"]
+[gd_scene load_steps=6 format=3 uid="uid://durkj4pqe32di"]
 
 [ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_e6t7s"]
-[ext_resource type="Script" path="res://scenes/world.gd" id="1_y73rv"]
+[ext_resource type="Script" path="res://codes/world.gd" id="1_y73rv"]
 [ext_resource type="PackedScene" uid="uid://hwkf78bcb1r3" path="res://scenes/ui.tscn" id="2_hclxq"]
 [ext_resource type="PackedScene" uid="uid://bc5nh7luewpkm" path="res://scenes/erbide.tscn" id="4_4r32y"]
+[ext_resource type="PackedScene" uid="uid://daoryq86wit4j" path="res://scenes/solaria.tscn" id="5_wjah2"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_y73rv")
@@ -41,6 +42,9 @@ autostart = true
 
 [node name="Erbide" parent="." instance=ExtResource("4_4r32y")]
 position = Vector2(10518, 5261)
+
+[node name="Solaria" parent="." instance=ExtResource("5_wjah2")]
+position = Vector2(10674, 5329)
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Timer" to="Camera2D/UI" method="_on_timer_timeout"]

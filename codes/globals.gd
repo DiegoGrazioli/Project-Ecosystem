@@ -6,6 +6,9 @@ var world_cycles
 
 #Z-level order (dal basso all'alto): spore, piante, creature
 
+#wait time
+var wait_time = 1
+
 #numero di esistenze nel gioco
 var creatures = []
 var spores = []

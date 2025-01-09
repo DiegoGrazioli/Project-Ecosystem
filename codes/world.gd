@@ -16,6 +16,7 @@ func _process(delta: float) -> void:
 	elif Input.is_action_just_pressed("Dezoom"):
 		$Camera2D.zoom -= Vector2(0.1, 0.1)
 		$Camera2D.scale = Vector2(1 / $Camera2D.zoom.x, 1 / $Camera2D.zoom.y)
+	
 	if Input.is_action_pressed("su"):
 		$Camera2D.position.y -= 1
 	if Input.is_action_pressed("giù"):
@@ -24,7 +25,13 @@ func _process(delta: float) -> void:
 		$Camera2D.position.x += 1
 	if Input.is_action_pressed("sinistra"):
 		$Camera2D.position.x -= 1
-
+	
+	if Input.is_action_just_pressed("velocizza tempo"):
+		Globals.wait_time -= 0.05
+		$Timer.wait_time = Globals.wait_time
+	if Input.is_action_just_pressed("rallenta tempo"):
+		Globals.wait_time += 0.05
+		$Timer.wait_time = Globals.wait_time
 
 func _on_timer_timeout() -> void:
 	Globals.world_seconds += 1
