@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3 uid="uid://durkj4pqe32di"]
+
+[ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_e6t7s"]
+[ext_resource type="Script" path="res://scenes/world.gd" id="1_y73rv"]
+[ext_resource type="PackedScene" uid="uid://hwkf78bcb1r3" path="res://scenes/ui.tscn" id="2_hclxq"]
+[ext_resource type="PackedScene" uid="uid://bc5nh7luewpkm" path="res://scenes/erbide.tscn" id="4_4r32y"]
+
+[node name="World" type="Node2D"]
+script = ExtResource("1_y73rv")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(55226, 33105.5)
+scale = Vector2(99970, 62331)
+texture = ExtResource("1_e6t7s")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(10505, 5246)
+
+[node name="Control" type="Control" parent="Camera2D"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+metadata/_edit_use_anchors_ = true
+
+[node name="UI" parent="Camera2D" instance=ExtResource("2_hclxq")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = -575.0
+offset_top = -324.0
+offset_right = -575.0
+offset_bottom = -324.0
+grow_horizontal = 1
+grow_vertical = 1
+size_flags_horizontal = 8
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[node name="Erbide" parent="." instance=ExtResource("4_4r32y")]
+position = Vector2(10518, 5261)
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Timer" to="Camera2D/UI" method="_on_timer_timeout"]

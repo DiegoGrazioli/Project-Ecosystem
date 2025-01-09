@@ -1,0 +1,135 @@
+[gd_scene load_steps=5 format=3 uid="uid://bc5nh7luewpkm"]
+
+[ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_ish3j"]
+[ext_resource type="Script" path="res://codes/erbide.gd" id="1_l77ko"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ar121"]
+size = Vector2(16.4752, 16.3682)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xek8y"]
+size = Vector2(16.2683, 16.0181)
+
+[node name="Erbide" type="CharacterBody2D"]
+position = Vector2(417, 161)
+script = ExtResource("1_l77ko")
+
+[node name="WorldCollision" type="CollisionShape2D" parent="."]
+position = Vector2(8.63193, 5.97987)
+shape = SubResource("RectangleShape2D_ar121")
+debug_color = Color(0.395566, 0.609891, 0, 0.42)
+
+[node name="Skin" type="Sprite2D" parent="."]
+modulate = Color(0.737255, 0.498039, 0.615686, 1)
+position = Vector2(8.50447, 6)
+scale = Vector2(16, 16)
+texture = ExtResource("1_ish3j")
+
+[node name="Hover" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hover"]
+light_mask = 0
+visibility_layer = 0
+position = Vector2(8.44034, 6.1315)
+shape = SubResource("RectangleShape2D_xek8y")
+
+[node name="Info" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 0.504471
+offset_top = -24.2942
+offset_right = 128.504
+offset_bottom = 101.706
+
+[node name="Rectangle" type="Sprite2D" parent="Info"]
+modulate = Color(1, 1, 1, 0.278431)
+position = Vector2(60.4118, -61.8696)
+scale = Vector2(128, 128)
+texture = ExtResource("1_ish3j")
+
+[node name="Control" type="Control" parent="Info"]
+anchors_preset = 0
+offset_left = -3.0
+offset_top = -126.0
+offset_right = 125.0
+offset_bottom = 2.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Info/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SpecieContainer" type="HBoxContainer" parent="Info/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Specie" type="Label" parent="Info/Control/VBoxContainer/SpecieContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Specie:"
+
+[node name="SpecieFill" type="Label" parent="Info/Control/VBoxContainer/SpecieContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "ADD HERE"
+
+[node name="DietaContainer" type="HBoxContainer" parent="Info/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Dieta" type="Label" parent="Info/Control/VBoxContainer/DietaContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Dieta:"
+
+[node name="DietaFill" type="Label" parent="Info/Control/VBoxContainer/DietaContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "ADD HERE"
+
+[node name="EtaContainer" type="HBoxContainer" parent="Info/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Eta" type="Label" parent="Info/Control/VBoxContainer/EtaContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Età:"
+
+[node name="EtaFill" type="Label" parent="Info/Control/VBoxContainer/EtaContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "ADD HERE"
+
+[node name="FameContainer" type="HBoxContainer" parent="Info/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Fame" type="Label" parent="Info/Control/VBoxContainer/FameContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Fame:"
+
+[node name="FameFill" type="Label" parent="Info/Control/VBoxContainer/FameContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "ADD HERE"
+
+[node name="VitaContainer" type="HBoxContainer" parent="Info/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="HP" type="Label" parent="Info/Control/VBoxContainer/VitaContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "HP:"
+
+[node name="HPFill" type="Label" parent="Info/Control/VBoxContainer/VitaContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "ADD HERE"
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="mouse_entered" from="Hover" to="." method="_on_hover_mouse_entered"]
+[connection signal="mouse_exited" from="Hover" to="." method="_on_hover_mouse_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
