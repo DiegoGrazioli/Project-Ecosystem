@@ -10,7 +10,7 @@ size = Vector2(16.4752, 16.3682)
 size = Vector2(16.2683, 16.0181)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_3atj1"]
-radius = 364.265
+radius = 353.524
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jrm58"]
 radius = 81.8126
@@ -152,7 +152,10 @@ shape = SubResource("CircleShape2D_jrm58")
 debug_color = Color(0.805798, 0.00234493, 0.994998, 0.42)
 
 [node name="Cooldown" type="Timer" parent="EatArea"]
-wait_time = 4.0
+
+[node name="MoveStatus" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
 
 [connection signal="mouse_entered" from="Hover" to="." method="_on_hover_mouse_entered"]
 [connection signal="mouse_exited" from="Hover" to="." method="_on_hover_mouse_exited"]
@@ -160,3 +163,5 @@ wait_time = 4.0
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
 [connection signal="body_entered" from="EatArea" to="." method="_on_eat_area_body_entered"]
+[connection signal="timeout" from="EatArea/Cooldown" to="." method="_on_cooldown_timeout"]
+[connection signal="timeout" from="MoveStatus" to="." method="_on_move_status_timeout"]

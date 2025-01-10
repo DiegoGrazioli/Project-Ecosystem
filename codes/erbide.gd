@@ -1,19 +1,22 @@
 class_name creature extends CharacterBody2D
 
-
 @export var existence = true
+
+signal death
 
 #statistiche:
 var specie = "Erbide"
 var dieta = "Erbivoro"
 var age = [0, 0, 0] #vita media: 1 ciclo, smette di crescere a 5 minuti = fertilità
 var hunger = 10
+var hunger_limit = 5
 var life = 100
 var pos = Vector2(position.x, position.y)
-var speed = 500
+var speed = 0.1
 
 var hungry = false
 var secs = false #chi sa, sa
+var dead = false
 
 var vegetables_in_area = []
 
@@ -26,7 +29,25 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	$Timer.wait_time = Globals.wait_time
-
+	$MoveStatus.wait_time = Globals.wait_time * 2
+	
+	#raggio di ricerca
+	if hungry:
+		if $Area2D/CollisionShape2D.shape.radius < 550:
+			$Area2D/CollisionShape2D.shape.radius += 5
+		else:
+			$Area2D/CollisionShape2D.shape.radius = 1
+	
+	#movimento
+	var movement
+	if vegetables_in_area.size() != 0 and hungry:
+		movement = Vector2(vegetables_in_area[0].position.x, vegetables_in_area[0].position.y).normalized()
+		velocity = movement * speed * 5
+	elif vegetables_in_area.size() == 0 and hungry:
+		movement = Vector2(0, 0)
+		velocity = movement * speed
+	move_and_collide(velocity)
+	
 
 func _on_timer_timeout() -> void:
 	#aumento di età
@@ -37,6 +58,12 @@ func _on_timer_timeout() -> void:
 		if age[1] == 10:
 			age[1] = 0
 			age[0] += 1
+	
+	if age[0] > 0 and randi_range(0, 1) == 0:
+		dead = true
+		
+	if dead:
+		$AnimationPlayer.play()
 
 	#aggiorna info
 	$Info/Control/VBoxContainer/EtaContainer/EtaFill.text = str(age[0]) + ", " + str(age[1]) + ", " + str(age[2])
@@ -49,35 +76,19 @@ func _on_timer_timeout() -> void:
 	if mod < 16:
 		$Skin.scale.x = mod * 4
 		$Skin.scale.y = mod * 4
-
-	#movimento
-	var movement
-	if !hungry and !secs:
-		if randi_range(0, 1) == 0:
-			movement = Vector2(0, 0)
-		else:
-			movement = Vector2(randi_range(-1, 1), randi_range(-1, 1))
-		velocity = movement * speed
-		
-	if vegetables_in_area.size() != 0 and hungry:
-		movement = Vector2(vegetables_in_area[0].position.x, vegetables_in_area[0].position.y).normalized()
-		velocity = movement * speed
-	elif vegetables_in_area.size() == 0 and hungry:
-		movement = Vector2(0, 0)
-		velocity = movement * speed
-	move_and_slide()
-	
-	print(vegetables_in_area.size())
 	
 	#decadimento della fame
-	if hunger < 3:
+	if hunger < hunger_limit:
 		hungry = true
 	
 	
+	#perde vita
 	if randi_range(0, 1) == 0 and hunger > 0:
 		hunger -= 0.5
-		if hunger < 1:
-			life -= 1
+	if hunger < 1:
+		life -= 1
+		if life <= 0:
+			dead = true
 		
 
 func _on_hover_mouse_entered() -> void:
@@ -89,19 +100,45 @@ func _on_hover_mouse_exited() -> void:
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body is pianta:
+	if body is foglia:
 		vegetables_in_area.append(body)
+		print(vegetables_in_area.size())
+		print(velocity)
 
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body is foglia:
-		vegetables_in_area.erase(body)
+		vegetables_in_area.pop_front()
 
 
 func _on_eat_area_body_entered(body: Node2D) -> void:
-	if body is foglia and hunger < 3 and $EatArea/Cooldown.is_stopped():
-		vegetables_in_area.erase(body)
-		body.queue_free()
+	if body is foglia and hunger < hunger_limit and $EatArea/Cooldown.is_stopped():
+		vegetables_in_area.pop_front()
 		$EatArea/Cooldown.start()
+		body.queue_free()
+		$EatArea/CollisionShape2D.disabled = true
 		hunger += 5
 		hungry = false
+		$MoveStatus.start()
+
+
+func _on_cooldown_timeout() -> void:
+	$EatArea/CollisionShape2D.disabled = false
+
+
+func _on_move_status_timeout() -> void:
+	if hunger < hunger_limit:
+		$MoveStatus.stop()
+	else:
+		var movement
+		if !hungry and !secs:
+			if randi_range(0, 1) == 0:
+				movement = Vector2(0, 0)
+			else:
+				movement = Vector2(randi_range(-1, 1), randi_range(-1, 1))
+			velocity = movement * speed
+
+
+func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	emit_signal("death")
+	queue_free()

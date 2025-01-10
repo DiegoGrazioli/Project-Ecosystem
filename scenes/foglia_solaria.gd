@@ -17,6 +17,9 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	$Timer.wait_time = Globals.wait_time
+	if !fertility and !growth:
+		$Timer.stop()
+		$CollisionShape2D.disabled = true
 
 
 func _on_timer_timeout() -> void:
@@ -29,18 +32,14 @@ func _on_timer_timeout() -> void:
 		growth = false
 		fertility = true
 	
-	if randi_range(0, 24 + leaves * 2) == 0 and fertility:
+	if randi_range(0, 32 + leaves * 2) == 0 and fertility:
 		var foglia = foglia_solaria.instantiate()
-		# destra o sinistra? x
 		
 		var foglia_pos = Vector2(randi_range(predisposition.x - 6, predisposition.x + 6), randi_range(predisposition.y - 6, predisposition.y + 6))
 		
 		foglia.position = foglia_pos
 		foglia.predisposition = foglia_pos
-		if randi_range(0, 4) == 0:
-			foglia.growth = false
-		else:
-			$Leaves.add_child(foglia)
+		$Leaves.add_child(foglia)
 		leaves += 1
 		
 		if randi_range(0, 8) != 0:

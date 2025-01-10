@@ -48,3 +48,8 @@ func _on_timer_timeout() -> void:
 		if Globals.world_minutes == 10:
 			Globals.world_minutes = 0
 			Globals.world_cycles += 1
+
+
+func _on_erbide_death() -> void:
+	if randi_range(0, 1) == 0:
+		pass #crea fungo

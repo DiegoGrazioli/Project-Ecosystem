@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://daoryq86wit4j" path="res://scenes/solaria.tscn" id="5_wjah2"]
 
 [node name="World" type="Node2D"]
+position = Vector2(-1, 0)
 script = ExtResource("1_y73rv")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
@@ -41,10 +42,11 @@ size_flags_horizontal = 8
 autostart = true
 
 [node name="Erbide" parent="." instance=ExtResource("4_4r32y")]
-position = Vector2(10189, 5184)
+position = Vector2(10196, 5189)
 
 [node name="Solaria" parent="." instance=ExtResource("5_wjah2")]
 position = Vector2(10847, 5470)
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Timer" to="Camera2D/UI" method="_on_timer_timeout"]
+[connection signal="death" from="Erbide" to="." method="_on_erbide_death"]
