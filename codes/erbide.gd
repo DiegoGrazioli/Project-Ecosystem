@@ -38,58 +38,57 @@ func _process(delta: float) -> void:
 		else:
 			$Area2D/CollisionShape2D.shape.radius = 1
 	
+	if life <= 0:
+		dead = true
+		$AnimationPlayer.play("death")
+	else:
 	#movimento
-	var movement
-	if vegetables_in_area.size() != 0 and hungry:
-		movement = Vector2(vegetables_in_area[0].position.x, vegetables_in_area[0].position.y).normalized()
-		velocity = movement * speed * 5
-	elif vegetables_in_area.size() == 0 and hungry:
-		movement = Vector2(0, 0)
-		velocity = movement * speed
-	move_and_collide(velocity)
+		var movement
+		if vegetables_in_area.size() != 0 and hungry:
+			movement = Vector2(vegetables_in_area[0].position.x, vegetables_in_area[0].position.y).normalized()
+			velocity = movement * speed * 5
+		elif vegetables_in_area.size() == 0 and hungry:
+			movement = Vector2(0, 0)
+			velocity = movement * speed
+		move_and_collide(velocity)
 	
 
 func _on_timer_timeout() -> void:
-	#aumento di età
-	age[2] += 1
-	if age[2] == 60:
-		age[2] = 0
-		age[1] += 1
-		if age[1] == 10:
-			age[1] = 0
-			age[0] += 1
-	
-	if age[0] > 0 and randi_range(0, 1) == 0:
-		dead = true
+	if !dead:
+		#aumento di età
+		age[2] += 1
+		if age[2] == 60:
+			age[2] = 0
+			age[1] += 1
+			if age[1] == 10:
+				age[1] = 0
+				age[0] += 1
 		
-	if dead:
-		$AnimationPlayer.play()
-
-	#aggiorna info
-	$Info/Control/VBoxContainer/EtaContainer/EtaFill.text = str(age[0]) + ", " + str(age[1]) + ", " + str(age[2])
-	$Info/Control/VBoxContainer/FameContainer/FameFill.text = str(hunger) + "/10"
-	$Info/Control/VBoxContainer/VitaContainer/HPFill.text = str(life) + "/100"
-	
-	#aggiorna dimensioni
-	var s = age[1] * 60 + age[0] * 600 + age[2]
-	var mod = float(sqrt(s) + 1)
-	if mod < 16:
-		$Skin.scale.x = mod * 4
-		$Skin.scale.y = mod * 4
-	
-	#decadimento della fame
-	if hunger < hunger_limit:
-		hungry = true
-	
-	
-	#perde vita
-	if randi_range(0, 1) == 0 and hunger > 0:
-		hunger -= 0.5
-	if hunger < 1:
-		life -= 1
-		if life <= 0:
+		if age[0] > 0 and randi_range(0, 1) == 0:
 			dead = true
+
+		#aggiorna info
+		$Info/Control/VBoxContainer/EtaContainer/EtaFill.text = str(age[0]) + ", " + str(age[1]) + ", " + str(age[2])
+		$Info/Control/VBoxContainer/FameContainer/FameFill.text = str(hunger) + "/10"
+		$Info/Control/VBoxContainer/VitaContainer/HPFill.text = str(life) + "/100"
 		
+		#aggiorna dimensioni
+		var s = age[1] * 60 + age[0] * 600 + age[2]
+		var mod = float(sqrt(s) + 1)
+		if mod < 16:
+			$Skin.scale.x = mod * 4
+			$Skin.scale.y = mod * 4
+		
+		#decadimento della fame
+		if hunger < hunger_limit:
+			hungry = true
+		
+		
+		#perde vita
+		if randi_range(0, 1) == 0 and hunger > 0:
+			hunger -= 0.5
+		if hunger < 1:
+			life -= 1
 
 func _on_hover_mouse_entered() -> void:
 	$Info.visible = true
@@ -140,5 +139,5 @@ func _on_move_status_timeout() -> void:
 
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
-	emit_signal("death")
+	emit_signal("death", position)
 	queue_free()

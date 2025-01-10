@@ -1,10 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://durkj4pqe32di"]
+[gd_scene load_steps=8 format=3 uid="uid://durkj4pqe32di"]
 
 [ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_e6t7s"]
 [ext_resource type="Script" path="res://codes/world.gd" id="1_y73rv"]
 [ext_resource type="PackedScene" uid="uid://hwkf78bcb1r3" path="res://scenes/ui.tscn" id="2_hclxq"]
 [ext_resource type="PackedScene" uid="uid://bc5nh7luewpkm" path="res://scenes/erbide.tscn" id="4_4r32y"]
 [ext_resource type="PackedScene" uid="uid://daoryq86wit4j" path="res://scenes/solaria.tscn" id="5_wjah2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vqlf4"]
+size = Vector2(101561, 879)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ib281"]
+size = Vector2(2176, 69923)
 
 [node name="World" type="Node2D"]
 position = Vector2(-1, 0)
@@ -46,6 +52,30 @@ position = Vector2(10196, 5189)
 
 [node name="Solaria" parent="." instance=ExtResource("5_wjah2")]
 position = Vector2(10847, 5470)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(55142.8, 2000)
+shape = SubResource("RectangleShape2D_vqlf4")
+
+[node name="StaticBody2D2" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D2"]
+position = Vector2(55326.4, 64336)
+shape = SubResource("RectangleShape2D_vqlf4")
+
+[node name="StaticBody2D3" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D3"]
+position = Vector2(4436, 33961.5)
+shape = SubResource("RectangleShape2D_ib281")
+
+[node name="StaticBody2D4" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D4"]
+position = Vector2(105428, 33322)
+shape = SubResource("RectangleShape2D_ib281")
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Timer" to="Camera2D/UI" method="_on_timer_timeout"]

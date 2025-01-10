@@ -2,13 +2,14 @@ extends Node2D
 
 var speed = 1
 
+@onready var funghinoide: PackedScene = preload("res://scenes/funghinoide.tscn")
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if Globals.world_cycles == null and Globals.world_minutes == null and Globals.world_seconds == null:
 		Globals.world_cycles = 0
 		Globals.world_minutes = 0
 		Globals.world_seconds = 0
-
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -50,6 +51,12 @@ func _on_timer_timeout() -> void:
 			Globals.world_cycles += 1
 
 
-func _on_erbide_death() -> void:
-	if randi_range(0, 1) == 0:
-		pass #crea fungo
+func _on_erbide_death(pos) -> void:
+	print("vita?")
+	if randi_range(0, 1) != 0:
+		var fun = funghinoide.instantiate()
+		fun.position = pos
+		add_child(fun)
+		print("si")
+	else:
+		print("no")

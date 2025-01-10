@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://d3w4f7evryh6c"]
+
+[ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_50fmp"]
+[ext_resource type="Script" path="res://scenes/funghinoide.gd" id="1_u0io2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5s4t1"]
+
+[sub_resource type="Gradient" id="Gradient_t7o5l"]
+offsets = PackedFloat32Array(0.04, 0.166667, 0.74, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 0.647059, 0.517647, 1, 1, 0.647059, 0.517647, 1, 0)
+
+[node name="Funghinoide" type="CharacterBody2D"]
+script = ExtResource("1_u0io2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_5s4t1")
+
+[node name="Skin" type="Sprite2D" parent="."]
+modulate = Color(0.645879, 0.517065, 1, 1)
+scale = Vector2(16, 16)
+texture = ExtResource("1_50fmp")
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="."]
+amount = 16
+emission_shape = 3
+emission_rect_extents = Vector2(8, 8)
+direction = Vector2(0, 1)
+spread = 63.18
+gravity = Vector2(0, -15)
+scale_amount_min = 0.0
+scale_amount_max = 1.5
+color_ramp = SubResource("Gradient_t7o5l")
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -32,10 +32,10 @@ func _on_timer_timeout() -> void:
 		growth = false
 		fertility = true
 	
-	if randi_range(0, 32 + leaves * 2) == 0 and fertility:
+	if randi_range(0, 28 + leaves * 2) == 0 and fertility:
 		var foglia = foglia_solaria.instantiate()
 		
-		var foglia_pos = Vector2(randi_range(predisposition.x - 6, predisposition.x + 6), randi_range(predisposition.y - 6, predisposition.y + 6))
+		var foglia_pos = Vector2(randi_range(predisposition.x - 4, predisposition.x + 4), randi_range(predisposition.y - 4, predisposition.y + 4))
 		
 		foglia.position = foglia_pos
 		foglia.predisposition = foglia_pos

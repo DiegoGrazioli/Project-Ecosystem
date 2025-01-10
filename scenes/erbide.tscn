@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bc5nh7luewpkm"]
+[gd_scene load_steps=10 format=3 uid="uid://bc5nh7luewpkm"]
 
 [ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_ish3j"]
 [ext_resource type="Script" path="res://codes/erbide.gd" id="1_l77ko"]
@@ -15,11 +15,49 @@ radius = 353.524
 [sub_resource type="CircleShape2D" id="CircleShape2D_jrm58"]
 radius = 81.8126
 
+[sub_resource type="Animation" id="Animation_swiw0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skin:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0.737255, 0.498039, 0.615686, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_rttyi"]
+resource_name = "death"
+length = 5.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Skin:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1, 5),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(0.737255, 0.498039, 0.615686, 1), Color(0.899685, 0.77338, 0.831103, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_oupwm"]
+_data = {
+"RESET": SubResource("Animation_swiw0"),
+"death": SubResource("Animation_rttyi")
+}
+
 [node name="Erbide" type="CharacterBody2D"]
 position = Vector2(417, 161)
 script = ExtResource("1_l77ko")
 
 [node name="WorldCollision" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(8.63193, 5.97987)
 scale = Vector2(4, 4)
 shape = SubResource("RectangleShape2D_ar121")
@@ -34,6 +72,7 @@ texture = ExtResource("1_ish3j")
 [node name="Hover" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hover"]
+visible = false
 light_mask = 0
 visibility_layer = 0
 position = Vector2(8.44034, 6.1315)
@@ -139,12 +178,14 @@ text = "ADD HERE"
 autostart = true
 
 [node name="Area2D" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(8.63193, 5.97987)
 shape = SubResource("CircleShape2D_3atj1")
 
 [node name="EatArea" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EatArea"]
 position = Vector2(8.63193, 5.97987)
@@ -157,6 +198,11 @@ debug_color = Color(0.805798, 0.00234493, 0.994998, 0.42)
 wait_time = 2.0
 autostart = true
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_oupwm")
+}
+
 [connection signal="mouse_entered" from="Hover" to="." method="_on_hover_mouse_entered"]
 [connection signal="mouse_exited" from="Hover" to="." method="_on_hover_mouse_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
@@ -165,3 +211,4 @@ autostart = true
 [connection signal="body_entered" from="EatArea" to="." method="_on_eat_area_body_entered"]
 [connection signal="timeout" from="EatArea/Cooldown" to="." method="_on_cooldown_timeout"]
 [connection signal="timeout" from="MoveStatus" to="." method="_on_move_status_timeout"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
