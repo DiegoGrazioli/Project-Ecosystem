@@ -17,8 +17,8 @@ var plants = []
 #tipi di esistenze
 	#Carnide: si ciba di erbivori (Erbide e Pollinide)
 	#Res Mante: si ciba di Carnide ma "ci mette molto a digerire" (dorme molto, AFK) e si riproduce poco spesso
-	#Erbide: si ciba di piante (Solaria, Vaniscenza e "Terminaria")
-	#Pollinide: si ciba di piante e si occupa di spargere il polline
+	#Erbide: si ciba di foglie (Solaria, Vaniscenza e "Terminaria")
+	#Pollinide: si ciba di piante
 var poss_creatures = ["Carnide", "Res Mante", "Erbide", "Pollinide"]
 
 	#Funghinoide: nasce da cadaveri. Buono!

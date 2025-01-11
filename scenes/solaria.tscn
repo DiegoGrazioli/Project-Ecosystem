@@ -105,3 +105,7 @@ text = "ADD HERE"
 autostart = true
 
 [node name="Leaves" type="Node2D" parent="."]
+
+[connection signal="mouse_entered" from="Hover" to="." method="_on_hover_mouse_entered"]
+[connection signal="mouse_exited" from="Hover" to="." method="_on_hover_mouse_exited"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

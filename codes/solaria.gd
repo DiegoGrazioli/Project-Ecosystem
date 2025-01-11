@@ -10,12 +10,8 @@ class_name pianta
 #statistiche:
 var specie = "Solaria"
 var dieta = "Sole"
-var age = [0, 0, 0] #vita media: 1 ciclo, smette di crescere a 5 minuti = fertilità
-var pos = Vector2(position.x, position.y)
+var age = [0, 0, 0]
 var leaves = 0
-
-var hungry = false
-var secs = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -44,7 +40,6 @@ func _on_timer_timeout() -> void:
 		if age[1] == 10:
 			age[1] = 0
 			age[0] += 1
-
 	#aggiorna info
 	$Info/Control/VBoxContainer/EtaContainer/EtaFill.text = str(age[0]) + ", " + str(age[1]) + ", " + str(age[2])
 

@@ -53,7 +53,7 @@ func _on_timer_timeout() -> void:
 
 func _on_erbide_death(pos) -> void:
 	print("vita?")
-	if randi_range(0, 1) != 0:
+	if randi_range(0, 4) != 0:
 		var fun = funghinoide.instantiate()
 		fun.position = pos
 		add_child(fun)

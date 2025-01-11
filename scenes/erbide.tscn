@@ -3,9 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_ish3j"]
 [ext_resource type="Script" path="res://codes/erbide.gd" id="1_l77ko"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ar121"]
-size = Vector2(16.4752, 16.3682)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xek8y"]
 size = Vector2(16.2683, 16.0181)
 
@@ -52,16 +49,13 @@ _data = {
 "death": SubResource("Animation_rttyi")
 }
 
+[sub_resource type="Gradient" id="Gradient_p4rou"]
+offsets = PackedFloat32Array(0.02, 0.08, 0.513333, 1)
+colors = PackedColorArray(0, 0, 0, 0, 0.294118, 0.294118, 0, 1, 1, 1, 0.698, 1, 1, 1, 0.662745, 0)
+
 [node name="Erbide" type="CharacterBody2D"]
 position = Vector2(417, 161)
 script = ExtResource("1_l77ko")
-
-[node name="WorldCollision" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(8.63193, 5.97987)
-scale = Vector2(4, 4)
-shape = SubResource("RectangleShape2D_ar121")
-debug_color = Color(0.395566, 0.609891, 0, 0.42)
 
 [node name="Skin" type="Sprite2D" parent="."]
 modulate = Color(0.737255, 0.498039, 0.615686, 1)
@@ -72,7 +66,6 @@ texture = ExtResource("1_ish3j")
 [node name="Hover" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hover"]
-visible = false
 light_mask = 0
 visibility_layer = 0
 position = Vector2(8.44034, 6.1315)
@@ -178,14 +171,12 @@ text = "ADD HERE"
 autostart = true
 
 [node name="Area2D" type="Area2D" parent="."]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(8.63193, 5.97987)
 shape = SubResource("CircleShape2D_3atj1")
 
 [node name="EatArea" type="Area2D" parent="."]
-visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EatArea"]
 position = Vector2(8.63193, 5.97987)
@@ -203,6 +194,24 @@ libraries = {
 "": SubResource("AnimationLibrary_oupwm")
 }
 
+[node name="Polline" type="CPUParticles2D" parent="."]
+visible = false
+position = Vector2(8.44034, 5.97987)
+randomness = 1.0
+lifetime_randomness = 1.0
+emission_shape = 3
+emission_rect_extents = Vector2(8, 8)
+gravity = Vector2(0, -10)
+scale_amount_min = 0.0
+color_ramp = SubResource("Gradient_p4rou")
+
+[node name="PollinCooldown" type="Timer" parent="."]
+wait_time = 4.0
+
+[node name="BirthCooldown" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
 [connection signal="mouse_entered" from="Hover" to="." method="_on_hover_mouse_entered"]
 [connection signal="mouse_exited" from="Hover" to="." method="_on_hover_mouse_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
@@ -212,3 +221,5 @@ libraries = {
 [connection signal="timeout" from="EatArea/Cooldown" to="." method="_on_cooldown_timeout"]
 [connection signal="timeout" from="MoveStatus" to="." method="_on_move_status_timeout"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="timeout" from="PollinCooldown" to="." method="_on_pollin_cooldown_timeout"]
+[connection signal="timeout" from="BirthCooldown" to="." method="_on_birth_cooldown_timeout"]

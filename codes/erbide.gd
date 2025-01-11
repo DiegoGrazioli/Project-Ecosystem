@@ -2,6 +2,8 @@ class_name creature extends CharacterBody2D
 
 @export var existence = true
 
+@onready var solaria: PackedScene = preload("res://scenes/solaria.tscn")
+
 signal death
 
 #statistiche:
@@ -17,8 +19,11 @@ var speed = 0.1
 var hungry = false
 var secs = false #chi sa, sa
 var dead = false
+var impollinato = false
 
 var vegetables_in_area = []
+
+var sol
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -28,12 +33,23 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	#aggiorna i timer al tempo globale
 	$Timer.wait_time = Globals.wait_time
 	$MoveStatus.wait_time = Globals.wait_time * 2
+	$PollinCooldown.wait_time = Globals.wait_time * 4
+	$BirthCooldown.wait_time = Globals.wait_time * 2
+	
+	#polline
+	if impollinato:
+		$Polline.visible = true
+		if $PollinCooldown.is_stopped():
+			$PollinCooldown.start()
+	else:
+		$Polline.visible = false
 	
 	#raggio di ricerca
 	if hungry:
-		if $Area2D/CollisionShape2D.shape.radius < 550:
+		if $Area2D/CollisionShape2D.shape.radius < 750:
 			$Area2D/CollisionShape2D.shape.radius += 5
 		else:
 			$Area2D/CollisionShape2D.shape.radius = 1
@@ -44,14 +60,17 @@ func _process(delta: float) -> void:
 	else:
 	#movimento
 		var movement
-		if vegetables_in_area.size() != 0 and hungry:
-			movement = Vector2(vegetables_in_area[0].position.x, vegetables_in_area[0].position.y).normalized()
-			velocity = movement * speed * 5
-		elif vegetables_in_area.size() == 0 and hungry:
-			movement = Vector2(0, 0)
-			velocity = movement * speed
+		if vegetables_in_area.size() > 0 and hungry:
+			$EatArea/CollisionShape2D.disabled = false
+			var closest = get_closest_vegetable()
+			if closest:
+				var direction = closest.global_position - global_position
+				movement = direction.normalized()
+				velocity = movement * speed * 5
+			else:
+				velocity = Vector2.ZERO
 		move_and_collide(velocity)
-	
+		
 
 func _on_timer_timeout() -> void:
 	if !dead:
@@ -90,6 +109,22 @@ func _on_timer_timeout() -> void:
 		if hunger < 1:
 			life -= 1
 
+func get_closest_vegetable() -> Node2D:
+	if vegetables_in_area.size() == 0:
+		return null
+	vegetables_in_area.sort_custom(_compare_distance)
+	return vegetables_in_area[0]
+
+func _compare_distance(a: Node2D, b: Node2D) -> int:
+	var dist_a = position.distance_to(a.position)
+	var dist_b = position.distance_to(b.position)
+	if dist_a < dist_b:
+		return -1
+	elif dist_a > dist_b:
+		return 1
+	else:
+		return 0
+
 func _on_hover_mouse_entered() -> void:
 	$Info.visible = true
 
@@ -101,8 +136,6 @@ func _on_hover_mouse_exited() -> void:
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body is foglia:
 		vegetables_in_area.append(body)
-		print(vegetables_in_area.size())
-		print(velocity)
 
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
@@ -111,9 +144,16 @@ func _on_area_2d_body_exited(body: Node2D) -> void:
 
 
 func _on_eat_area_body_entered(body: Node2D) -> void:
-	if body is foglia and hunger < hunger_limit and $EatArea/Cooldown.is_stopped():
-		vegetables_in_area.pop_front()
+	if body is foglia and hungry:
+		print("gnam")
+		vegetables_in_area.erase(body)
 		$EatArea/Cooldown.start()
+		if body.pollins:
+			print("lesgo")
+			impollinato = true
+			$Polline.visible = true
+		else:
+			print("non va")
 		body.queue_free()
 		$EatArea/CollisionShape2D.disabled = true
 		hunger += 5
@@ -126,7 +166,7 @@ func _on_cooldown_timeout() -> void:
 
 
 func _on_move_status_timeout() -> void:
-	if hunger < hunger_limit:
+	if hungry:
 		$MoveStatus.stop()
 	else:
 		var movement
@@ -141,3 +181,20 @@ func _on_move_status_timeout() -> void:
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	emit_signal("death", position)
 	queue_free()
+
+
+func _on_pollin_cooldown_timeout() -> void:
+	if randi_range(0, 2) == 0:
+		$PollinCooldown.stop()
+		impollinato = false
+		print("fine")
+	else:
+		print("mada mada")
+	sol = solaria.instantiate()
+	sol.position = position - Vector2(32, 32)
+	get_parent().add_child(sol)
+	
+
+func _on_birth_cooldown_timeout() -> void:
+	if randi_range(0, 1) == 0:
+		get_parent().add_child(sol)
