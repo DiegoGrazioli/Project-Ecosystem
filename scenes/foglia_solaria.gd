@@ -46,6 +46,6 @@ func _on_timer_timeout() -> void:
 		$Leaves.add_child(foglia)
 		leaves += 1
 		
-		if randi_range(0, 8) != 0:
+		if randi_range(0, 6) != 0:
 			fertility = false
 			$Skin.modulate = Color.html("#cbd94e")

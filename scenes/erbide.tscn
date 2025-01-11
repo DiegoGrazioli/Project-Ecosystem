@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bc5nh7luewpkm"]
+[gd_scene load_steps=11 format=3 uid="uid://bc5nh7luewpkm"]
 
 [ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_ish3j"]
 [ext_resource type="Script" path="res://codes/erbide.gd" id="1_l77ko"]
@@ -53,7 +53,10 @@ _data = {
 offsets = PackedFloat32Array(0.02, 0.08, 0.513333, 1)
 colors = PackedColorArray(0, 0, 0, 0, 0.294118, 0.294118, 0, 1, 1, 1, 0.698, 1, 1, 1, 0.662745, 0)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xcfa2"]
+
 [node name="Erbide" type="CharacterBody2D"]
+z_index = 4
 position = Vector2(417, 161)
 script = ExtResource("1_l77ko")
 
@@ -167,6 +170,19 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 12
 text = "ADD HERE"
 
+[node name="GenderContainer" type="HBoxContainer" parent="Info/Control/VBoxContainer"]
+layout_mode = 2
+
+[node name="Gender" type="Label" parent="Info/Control/VBoxContainer/GenderContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "Genere:"
+
+[node name="GenderFill" type="Label" parent="Info/Control/VBoxContainer/GenderContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "ADD HERE"
+
 [node name="Timer" type="Timer" parent="."]
 autostart = true
 
@@ -212,6 +228,14 @@ wait_time = 4.0
 wait_time = 2.0
 one_shot = true
 
+[node name="InHeat" type="Timer" parent="."]
+wait_time = 8.0
+
+[node name="SecsShape" type="CollisionShape2D" parent="."]
+position = Vector2(8.63193, 5.97987)
+shape = SubResource("RectangleShape2D_xcfa2")
+disabled = true
+
 [connection signal="mouse_entered" from="Hover" to="." method="_on_hover_mouse_entered"]
 [connection signal="mouse_exited" from="Hover" to="." method="_on_hover_mouse_exited"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
@@ -223,3 +247,4 @@ one_shot = true
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="timeout" from="PollinCooldown" to="." method="_on_pollin_cooldown_timeout"]
 [connection signal="timeout" from="BirthCooldown" to="." method="_on_birth_cooldown_timeout"]
+[connection signal="timeout" from="InHeat" to="." method="_on_in_heat_timeout"]

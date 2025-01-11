@@ -51,17 +51,14 @@ autostart = true
 [node name="Erbide" parent="." instance=ExtResource("4_4r32y")]
 position = Vector2(10346, 5280)
 
+[node name="Erbide2" parent="." instance=ExtResource("4_4r32y")]
+position = Vector2(10391, 5172)
+
+[node name="Erbide3" parent="." instance=ExtResource("4_4r32y")]
+position = Vector2(10270, 5197)
+
 [node name="Solaria" parent="." instance=ExtResource("5_wjah2")]
 position = Vector2(10860, 5396)
-
-[node name="Solaria2" parent="." instance=ExtResource("5_wjah2")]
-position = Vector2(10764, 5287)
-
-[node name="Solaria3" parent="." instance=ExtResource("5_wjah2")]
-position = Vector2(10710, 5395)
-
-[node name="Solaria4" parent="." instance=ExtResource("5_wjah2")]
-position = Vector2(10395, 5044)
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
@@ -93,3 +90,5 @@ position = Vector2(10754, 5141)
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Timer" to="Camera2D/UI" method="_on_timer_timeout"]
 [connection signal="death" from="Erbide" to="." method="_on_erbide_death"]
+[connection signal="death" from="Erbide2" to="." method="_on_erbide_death"]
+[connection signal="death" from="Erbide3" to="." method="_on_erbide_death"]

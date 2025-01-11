@@ -13,6 +13,7 @@ colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 0.647059, 0.517647, 1, 1, 0.64
 size = Vector2(6, 6)
 
 [node name="Funghinoide" type="CharacterBody2D"]
+z_index = 3
 script = ExtResource("1_u0io2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

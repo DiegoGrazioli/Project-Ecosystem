@@ -11,6 +11,7 @@ offsets = PackedFloat32Array(0.02, 0.08, 0.513333, 1)
 colors = PackedColorArray(0, 0, 0, 0, 0.294118, 0.294118, 0, 1, 1, 1, 0.698, 1, 1, 1, 0.662745, 0)
 
 [node name="FogliaSolaria" type="CharacterBody2D"]
+z_index = 1
 script = ExtResource("1_hygch")
 
 [node name="Skin" type="Sprite2D" parent="."]

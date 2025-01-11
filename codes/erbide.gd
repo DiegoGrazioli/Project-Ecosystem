@@ -1,8 +1,9 @@
-class_name creature extends CharacterBody2D
+class_name erbide extends CharacterBody2D
 
 @export var existence = true
 
 @onready var solaria: PackedScene = preload("res://scenes/solaria.tscn")
+@onready var erbidino: PackedScene = preload("res://scenes/erbide.tscn")
 
 signal death
 
@@ -17,19 +18,29 @@ var pos = Vector2(position.x, position.y)
 var speed = 0.1
 
 var hungry = false
+var gender
 var secs = false #chi sa, sa
+var fertility = true
 var dead = false
 var impollinato = false
 
 var vegetables_in_area = []
+var hot_erbidi_in_area = []
 
 var sol
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	if randi_range(0, 1) == 0:
+		gender = "male"
+		$Skin.modulate = Color.html("#ae81bc")
+	else:
+		gender = "female"
+		$Skin.modulate = Color.html("#ce787d")
+
 	$Info/Control/VBoxContainer/SpecieContainer/SpecieFill.text = specie
 	$Info/Control/VBoxContainer/DietaContainer/DietaFill.text = dieta
-
+	$Info/Control/VBoxContainer/GenderContainer/GenderFill.text = gender
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -38,6 +49,7 @@ func _process(delta: float) -> void:
 	$MoveStatus.wait_time = Globals.wait_time * 2
 	$PollinCooldown.wait_time = Globals.wait_time * 4
 	$BirthCooldown.wait_time = Globals.wait_time * 2
+	$InHeat.wait_time = Globals.wait_time * 8
 	
 	#polline
 	if impollinato:
@@ -48,7 +60,7 @@ func _process(delta: float) -> void:
 		$Polline.visible = false
 	
 	#raggio di ricerca
-	if hungry:
+	if hungry or (secs and fertility):
 		if $Area2D/CollisionShape2D.shape.radius < 750:
 			$Area2D/CollisionShape2D.shape.radius += 5
 		else:
@@ -69,10 +81,26 @@ func _process(delta: float) -> void:
 				velocity = movement * speed * 5
 			else:
 				velocity = Vector2.ZERO
+		elif hot_erbidi_in_area.size() > 0 and secs and fertility:
+			$EatArea/CollisionShape2D.disabled = false
+			var closest = get_closest_hottie()
+			if closest:
+				var direction = closest.global_position - global_position
+				movement = direction.normalized()
+				velocity = movement * speed * 5
+			else:
+				velocity = Vector2.ZERO
 		move_and_collide(velocity)
 		
 
 func _on_timer_timeout() -> void:
+	if secs and fertility:
+		print("sessssss")
+		$SecsShape.disabled = false
+	else:
+		print("not yet")
+		$SecsShape.disabled = true
+	
 	if !dead:
 		#aumento di età
 		age[2] += 1
@@ -85,7 +113,10 @@ func _on_timer_timeout() -> void:
 		
 		if age[0] > 0 and randi_range(0, 1) == 0:
 			dead = true
-
+		if age[1] > 3:
+			$InHeat.start()
+			secs = true
+			
 		#aggiorna info
 		$Info/Control/VBoxContainer/EtaContainer/EtaFill.text = str(age[0]) + ", " + str(age[1]) + ", " + str(age[2])
 		$Info/Control/VBoxContainer/FameContainer/FameFill.text = str(hunger) + "/10"
@@ -115,6 +146,12 @@ func get_closest_vegetable() -> Node2D:
 	vegetables_in_area.sort_custom(_compare_distance)
 	return vegetables_in_area[0]
 
+func get_closest_hottie() -> Node2D:
+	if hot_erbidi_in_area.size() == 0:
+		return null
+	hot_erbidi_in_area.sort_custom(_compare_distance)
+	return hot_erbidi_in_area[0]
+
 func _compare_distance(a: Node2D, b: Node2D) -> int:
 	var dist_a = position.distance_to(a.position)
 	var dist_b = position.distance_to(b.position)
@@ -136,28 +173,47 @@ func _on_hover_mouse_exited() -> void:
 func _on_area_2d_body_entered(body: Node2D) -> void:
 	if body is foglia:
 		vegetables_in_area.append(body)
+	if body is erbide and body.gender != gender and body.secs:
+		hot_erbidi_in_area.append(body)
 
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
 	if body is foglia:
-		vegetables_in_area.pop_front()
+		vegetables_in_area.erase(body)
+	if body is erbide:
+		hot_erbidi_in_area.erase(body)
 
 
 func _on_eat_area_body_entered(body: Node2D) -> void:
 	if body is foglia and hungry:
-		print("gnam")
 		vegetables_in_area.erase(body)
 		$EatArea/Cooldown.start()
 		if body.pollins:
-			print("lesgo")
 			impollinato = true
 			$Polline.visible = true
-		else:
-			print("non va")
 		body.queue_free()
 		$EatArea/CollisionShape2D.disabled = true
 		hunger += 5
 		hungry = false
+		$MoveStatus.start()
+	if body is erbide and secs and fertility and body.fertility:
+		print("*turtle noise*")
+		$EatArea/Cooldown.start()
+		$EatArea/CollisionShape2D.disabled = true
+		if gender == "female":
+			var number_of_fioi = [randi_range(0, 1), randi_range(0, 1), randi_range(0, 1)]
+			for i in number_of_fioi:
+				if i == 0:
+					print("birth")
+					var erb = erbidino.instantiate()
+					erb.position = position
+					get_parent().add_child(erb)
+					fertility = false
+					body.fertility = false
+				else:
+					print("abirth")
+			
+		secs = false
 		$MoveStatus.start()
 
 
@@ -198,3 +254,10 @@ func _on_pollin_cooldown_timeout() -> void:
 func _on_birth_cooldown_timeout() -> void:
 	if randi_range(0, 1) == 0:
 		get_parent().add_child(sol)
+
+
+func _on_in_heat_timeout() -> void:
+	if secs:
+		secs = false
+	else: 
+		secs = true
