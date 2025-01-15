@@ -1,15 +1,15 @@
-[gd_scene load_steps=13 format=3 uid="uid://bc5nh7luewpkm"]
+[gd_scene load_steps=12 format=3 uid="uid://d3naq81glx47c"]
 
-[ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_ish3j"]
-[ext_resource type="Script" path="res://codes/erbide.gd" id="1_l77ko"]
+[ext_resource type="Script" path="res://codes/carnide.gd" id="1_bcyph"]
+[ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="2_eoy4b"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xek8y"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pjb8c"]
 size = Vector2(16.2683, 16.0181)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_3atj1"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_o6kch"]
 radius = 353.524
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_jrm58"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_rtoql"]
 radius = 81.8126
 
 [sub_resource type="Animation" id="Animation_swiw0"]
@@ -49,28 +49,22 @@ _data = {
 "death": SubResource("Animation_rttyi")
 }
 
-[sub_resource type="Gradient" id="Gradient_p4rou"]
-offsets = PackedFloat32Array(0.02, 0.08, 0.513333, 1)
-colors = PackedColorArray(0, 0, 0, 0, 0.294118, 0.294118, 0, 1, 1, 1, 0.698, 1, 1, 1, 0.662745, 0)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ig4rv"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xcfa2"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jrahp"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_261fp"]
 size = Vector2(1, 1)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_d8jc6"]
-radius = 115.434
+[sub_resource type="CircleShape2D" id="CircleShape2D_3eqgq"]
+radius = 160.012
 
-[node name="Erbide" type="CharacterBody2D"]
-z_index = 4
-position = Vector2(417, 161)
-script = ExtResource("1_l77ko")
+[node name="Carnide" type="CharacterBody2D"]
+script = ExtResource("1_bcyph")
 
 [node name="Skin" type="Sprite2D" parent="."]
 modulate = Color(0.737255, 0.498039, 0.615686, 1)
 position = Vector2(8.50447, 6)
 scale = Vector2(16, 16)
-texture = ExtResource("1_ish3j")
+texture = ExtResource("2_eoy4b")
 
 [node name="Hover" type="Area2D" parent="."]
 
@@ -79,7 +73,7 @@ light_mask = 0
 visibility_layer = 0
 position = Vector2(8.44034, 6.1315)
 scale = Vector2(4, 4)
-shape = SubResource("RectangleShape2D_xek8y")
+shape = SubResource("RectangleShape2D_pjb8c")
 
 [node name="Info" type="Control" parent="."]
 visible = false
@@ -94,7 +88,7 @@ offset_bottom = 87.114
 modulate = Color(1, 1, 1, 0.278431)
 position = Vector2(60.4118, -61.8696)
 scale = Vector2(128, 128)
-texture = ExtResource("1_ish3j")
+texture = ExtResource("2_eoy4b")
 
 [node name="Control" type="Control" parent="Info"]
 anchors_preset = 0
@@ -196,13 +190,13 @@ autostart = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 position = Vector2(8.63193, 5.97987)
-shape = SubResource("CircleShape2D_3atj1")
+shape = SubResource("CircleShape2D_o6kch")
 
 [node name="EatArea" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EatArea"]
 position = Vector2(8.63193, 5.97987)
-shape = SubResource("CircleShape2D_jrm58")
+shape = SubResource("CircleShape2D_rtoql")
 debug_color = Color(0.805798, 0.00234493, 0.994998, 0.42)
 
 [node name="Cooldown" type="Timer" parent="EatArea"]
@@ -216,20 +210,6 @@ libraries = {
 "": SubResource("AnimationLibrary_oupwm")
 }
 
-[node name="Polline" type="CPUParticles2D" parent="."]
-visible = false
-position = Vector2(8.44034, 5.97987)
-randomness = 1.0
-lifetime_randomness = 1.0
-emission_shape = 3
-emission_rect_extents = Vector2(8, 8)
-gravity = Vector2(0, -10)
-scale_amount_min = 0.0
-color_ramp = SubResource("Gradient_p4rou")
-
-[node name="PollinCooldown" type="Timer" parent="."]
-wait_time = 4.0
-
 [node name="BirthCooldown" type="Timer" parent="."]
 wait_time = 2.0
 one_shot = true
@@ -239,19 +219,23 @@ wait_time = 8.0
 
 [node name="SecsShape" type="CollisionShape2D" parent="."]
 position = Vector2(8.63193, 5.97987)
-shape = SubResource("RectangleShape2D_xcfa2")
+shape = SubResource("RectangleShape2D_ig4rv")
 disabled = true
 
 [node name="CarnideEater" type="CollisionShape2D" parent="."]
 position = Vector2(8, 6)
-shape = SubResource("RectangleShape2D_jrahp")
+shape = SubResource("RectangleShape2D_261fp")
 
 [node name="ErbiDetect" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ErbiDetect"]
 position = Vector2(8, 6)
-shape = SubResource("CircleShape2D_d8jc6")
+shape = SubResource("CircleShape2D_3eqgq")
 debug_color = Color(0.292053, 0.62956, 0, 0.42)
+
+[node name="Agguato" type="Timer" parent="ErbiDetect"]
+wait_time = 2.0
+one_shot = true
 
 [connection signal="mouse_entered" from="Hover" to="." method="_on_hover_mouse_entered"]
 [connection signal="mouse_exited" from="Hover" to="." method="_on_hover_mouse_exited"]
@@ -262,8 +246,8 @@ debug_color = Color(0.292053, 0.62956, 0, 0.42)
 [connection signal="timeout" from="EatArea/Cooldown" to="." method="_on_cooldown_timeout"]
 [connection signal="timeout" from="MoveStatus" to="." method="_on_move_status_timeout"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
-[connection signal="timeout" from="PollinCooldown" to="." method="_on_pollin_cooldown_timeout"]
 [connection signal="timeout" from="BirthCooldown" to="." method="_on_birth_cooldown_timeout"]
 [connection signal="timeout" from="InHeat" to="." method="_on_in_heat_timeout"]
 [connection signal="body_entered" from="ErbiDetect" to="." method="_on_erbi_detect_body_entered"]
 [connection signal="body_exited" from="ErbiDetect" to="." method="_on_erbi_detect_body_exited"]
+[connection signal="timeout" from="ErbiDetect/Agguato" to="." method="_on_agguato_timeout"]

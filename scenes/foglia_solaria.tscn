@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bjq5i76fr4mvp"]
 
 [ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_4xdba"]
-[ext_resource type="Script" path="res://scenes/foglia_solaria.gd" id="1_hygch"]
+[ext_resource type="Script" path="res://codes/foglia_solaria.gd" id="1_hygch"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6iosk"]
 size = Vector2(16, 16)

@@ -60,3 +60,14 @@ func _on_erbide_death(pos) -> void:
 		print("si")
 	else:
 		print("no")
+
+
+func _on_carnide_death(pos) -> void:
+	print("vita?")
+	if randi_range(0, 4) != 0:
+		var fun = funghinoide.instantiate()
+		fun.position = pos
+		add_child(fun)
+		print("si")
+	else:
+		print("no")

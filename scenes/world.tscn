@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://durkj4pqe32di"]
+[gd_scene load_steps=10 format=3 uid="uid://durkj4pqe32di"]
 
 [ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_e6t7s"]
 [ext_resource type="Script" path="res://codes/world.gd" id="1_y73rv"]
 [ext_resource type="PackedScene" uid="uid://hwkf78bcb1r3" path="res://scenes/ui.tscn" id="2_hclxq"]
 [ext_resource type="PackedScene" uid="uid://bc5nh7luewpkm" path="res://scenes/erbide.tscn" id="4_4r32y"]
 [ext_resource type="PackedScene" uid="uid://daoryq86wit4j" path="res://scenes/solaria.tscn" id="5_wjah2"]
+[ext_resource type="PackedScene" uid="uid://d3naq81glx47c" path="res://scenes/carnide.tscn" id="6_gb27n"]
 [ext_resource type="PackedScene" uid="uid://d3w4f7evryh6c" path="res://scenes/funghinoide.tscn" id="6_s2i1y"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vqlf4"]
@@ -60,6 +61,15 @@ position = Vector2(10270, 5197)
 [node name="Solaria" parent="." instance=ExtResource("5_wjah2")]
 position = Vector2(10860, 5396)
 
+[node name="Carnide" parent="." instance=ExtResource("6_gb27n")]
+position = Vector2(10772, 5521)
+
+[node name="Carnide2" parent="." instance=ExtResource("6_gb27n")]
+position = Vector2(10504, 5436)
+
+[node name="Carnide3" parent="." instance=ExtResource("6_gb27n")]
+position = Vector2(10687, 5330)
+
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
@@ -92,3 +102,6 @@ position = Vector2(10754, 5141)
 [connection signal="death" from="Erbide" to="." method="_on_erbide_death"]
 [connection signal="death" from="Erbide2" to="." method="_on_erbide_death"]
 [connection signal="death" from="Erbide3" to="." method="_on_erbide_death"]
+[connection signal="death" from="Carnide" to="." method="_on_carnide_death"]
+[connection signal="death" from="Carnide2" to="." method="_on_carnide_death"]
+[connection signal="death" from="Carnide3" to="." method="_on_carnide_death"]

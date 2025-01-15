@@ -1,19 +1,19 @@
-class_name erbide extends CharacterBody2D
+class_name carnide extends CharacterBody2D
 
 @export var existence = true
 
 @onready var solaria: PackedScene = preload("res://scenes/solaria.tscn")
-@onready var erbidino: PackedScene = preload("res://scenes/erbide.tscn")
+@onready var carnidino: PackedScene = preload("res://scenes/carnide.tscn")
 
 signal death
 
 #statistiche:
-var specie = "Erbide"
-var dieta = "Erbivoro"
+var specie = "Carnide"
+var dieta = "Carnivoro"
 var age = [0, 0, 0] #vita media: 1 ciclo, smette di crescere a 5 minuti = fertilità
-var hunger = 10
-var hunger_limit = 5
-var life = 100
+var hunger = 20
+var hunger_limit = 10
+var life = 70
 var pos = Vector2(position.x, position.y)
 var speed = 0.1
 
@@ -22,12 +22,9 @@ var gender
 var secs = false #chi sa, sa
 var fertility = true
 var dead = false
-var impollinato = false
-var alert = false
 
-var vegetables_in_area = []
-var hot_erbidi_in_area = []
-var dangerous_carnidi_in_area = []
+var erbides_in_area = []
+var hot_carnidi_in_area = []
 
 var sol
 
@@ -35,10 +32,10 @@ var sol
 func _ready() -> void:
 	if randi_range(0, 1) == 0:
 		gender = "male"
-		$Skin.modulate = Color.html("#ae81bc")
+		$Skin.modulate = Color.html("#640035")
 	else:
 		gender = "female"
-		$Skin.modulate = Color.html("#ce787d")
+		$Skin.modulate = Color.html("#b50015")
 
 	$Info/Control/VBoxContainer/SpecieContainer/SpecieFill.text = specie
 	$Info/Control/VBoxContainer/DietaContainer/DietaFill.text = dieta
@@ -49,20 +46,12 @@ func _process(delta: float) -> void:
 	#aggiorna i timer al tempo globale
 	$Timer.wait_time = Globals.wait_time
 	$MoveStatus.wait_time = Globals.wait_time * 2
-	$PollinCooldown.wait_time = Globals.wait_time * 4
 	$BirthCooldown.wait_time = Globals.wait_time * 2
 	$InHeat.wait_time = Globals.wait_time * 8
-	
-	#polline
-	if impollinato:
-		$Polline.visible = true
-		if $PollinCooldown.is_stopped():
-			$PollinCooldown.start()
-	else:
-		$Polline.visible = false
+	$ErbiDetect/Agguato.wait_time = Globals.wait_time * 2
 	
 	#raggio di ricerca
-	if hungry or (secs and fertility) or alert:
+	if hungry or (secs and fertility):
 		if $Area2D/CollisionShape2D.shape.radius < 750:
 			$Area2D/CollisionShape2D.shape.radius += 5
 		else:
@@ -74,22 +63,16 @@ func _process(delta: float) -> void:
 	else:
 	#movimento
 		var movement
-		if alert:
-			var closest = get_closest_carnide()
-			if closest:
-				var direction = global_position - closest.global_position
-				movement = direction.normalized()
-				velocity = movement * speed * 5
-		elif vegetables_in_area.size() > 0 and hungry:
+		if erbides_in_area.size() > 0 and hungry and $ErbiDetect/Agguato.is_stopped():
 			$EatArea/CollisionShape2D.disabled = false
-			var closest = get_closest_vegetable()
+			var closest = get_closest_erbide()
 			if closest:
 				var direction = closest.global_position - global_position
 				movement = direction.normalized()
 				velocity = movement * speed * 5
 			else:
 				velocity = Vector2.ZERO
-		elif hot_erbidi_in_area.size() > 0 and secs and fertility:
+		elif hot_carnidi_in_area.size() > 0 and secs and fertility:
 			$EatArea/CollisionShape2D.disabled = false
 			var closest = get_closest_hottie()
 			if closest:
@@ -126,15 +109,15 @@ func _on_timer_timeout() -> void:
 			
 		#aggiorna info
 		$Info/Control/VBoxContainer/EtaContainer/EtaFill.text = str(age[0]) + ", " + str(age[1]) + ", " + str(age[2])
-		$Info/Control/VBoxContainer/FameContainer/FameFill.text = str(hunger) + "/10"
-		$Info/Control/VBoxContainer/VitaContainer/HPFill.text = str(life) + "/100"
+		$Info/Control/VBoxContainer/FameContainer/FameFill.text = str(hunger) + "/20"
+		$Info/Control/VBoxContainer/VitaContainer/HPFill.text = str(life) + "/70"
 		
 		#aggiorna dimensioni
 		var s = age[1] * 60 + age[0] * 600 + age[2]
 		var mod = float(sqrt(s) + 1)
-		if mod < 16:
-			$Skin.scale.x = mod * 4
-			$Skin.scale.y = mod * 4
+		if mod < 12:
+			$Skin.scale.x = mod * 2
+			$Skin.scale.y = mod * 2
 		
 		#decadimento della fame
 		if hunger < hunger_limit:
@@ -147,23 +130,17 @@ func _on_timer_timeout() -> void:
 		if hunger < 1:
 			life -= 1
 
-func get_closest_vegetable() -> Node2D:
-	if vegetables_in_area.size() == 0:
+func get_closest_erbide() -> Node2D:
+	if erbides_in_area.size() == 0:
 		return null
-	vegetables_in_area.sort_custom(_compare_distance)
-	return vegetables_in_area[0]
-	
-func get_closest_carnide() -> Node2D:
-	if dangerous_carnidi_in_area.size() == 0:
-		return null
-	dangerous_carnidi_in_area.sort_custom(_compare_distance)
-	return dangerous_carnidi_in_area[0]
+	erbides_in_area.sort_custom(_compare_distance)
+	return erbides_in_area[0]
 
 func get_closest_hottie() -> Node2D:
-	if hot_erbidi_in_area.size() == 0:
+	if hot_carnidi_in_area.size() == 0:
 		return null
-	hot_erbidi_in_area.sort_custom(_compare_distance)
-	return hot_erbidi_in_area[0]
+	hot_carnidi_in_area.sort_custom(_compare_distance)
+	return hot_carnidi_in_area[0]
 
 func _compare_distance(a: Node2D, b: Node2D) -> int:
 	var dist_a = position.distance_to(a.position)
@@ -184,32 +161,29 @@ func _on_hover_mouse_exited() -> void:
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body is foglia:
-		vegetables_in_area.append(body)
-	if body is erbide and body.gender != gender and body.secs:
-		hot_erbidi_in_area.append(body)
+	if body is erbide:
+		erbides_in_area.append(body)
+	if body is carnide and body.gender != gender and body.secs:
+		hot_carnidi_in_area.append(body)
 
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
-	if body is foglia:
-		vegetables_in_area.erase(body)
 	if body is erbide:
-		hot_erbidi_in_area.erase(body)
+		erbides_in_area.erase(body)
+	if body is carnide:
+		hot_carnidi_in_area.erase(body)
 
 
 func _on_eat_area_body_entered(body: Node2D) -> void:
-	if body is foglia and hungry:
-		vegetables_in_area.erase(body)
+	if body is erbide and hungry:
+		erbides_in_area.erase(body)
 		$EatArea/Cooldown.start()
-		if body.pollins:
-			impollinato = true
-			$Polline.visible = true
 		body.queue_free()
 		$EatArea/CollisionShape2D.disabled = true
 		hunger += 5
 		hungry = false
 		$MoveStatus.start()
-	if body is erbide and secs and fertility and body.fertility:
+	if body is carnide and secs and fertility and body.fertility:
 		print("*turtle noise*")
 		$EatArea/Cooldown.start()
 		$EatArea/CollisionShape2D.disabled = true
@@ -218,7 +192,7 @@ func _on_eat_area_body_entered(body: Node2D) -> void:
 			for i in number_of_fioi:
 				if i == 0:
 					print("birth")
-					var erb = erbidino.instantiate()
+					var erb = carnidino.instantiate()
 					erb.position = position
 					get_parent().add_child(erb)
 					fertility = false
@@ -235,7 +209,7 @@ func _on_cooldown_timeout() -> void:
 
 
 func _on_move_status_timeout() -> void:
-	if hungry:
+	if hungry or !$ErbiDetect/Agguato.is_stopped():
 		$MoveStatus.stop()
 	else:
 		var movement
@@ -245,23 +219,12 @@ func _on_move_status_timeout() -> void:
 			else:
 				movement = Vector2(randi_range(-1, 1), randi_range(-1, 1))
 			velocity = movement * speed
-
+	if !$ErbiDetect/Agguato.is_stopped():
+		velocity = Vector2.ZERO
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	emit_signal("death", position)
 	queue_free()
-
-
-func _on_pollin_cooldown_timeout() -> void:
-	if randi_range(0, 2) == 0:
-		$PollinCooldown.stop()
-		impollinato = false
-		print("fine")
-	else:
-		print("mada mada")
-	sol = solaria.instantiate()
-	sol.position = position - Vector2(32, 32)
-	get_parent().add_child(sol)
 	
 
 func _on_birth_cooldown_timeout() -> void:
@@ -277,13 +240,18 @@ func _on_in_heat_timeout() -> void:
 
 
 func _on_erbi_detect_body_entered(body: Node2D) -> void:
-	if body is carnide:
-		alert = true
-		dangerous_carnidi_in_area.append(body)
+	if body is erbide and $ErbiDetect/Agguato.is_stopped():
+		$ErbiDetect/Agguato.start()
 
 
 func _on_erbi_detect_body_exited(body: Node2D) -> void:
-	if body is carnide:
-		dangerous_carnidi_in_area.erase(body)
-	if dangerous_carnidi_in_area.size() == 0:
-		alert = false
+	pass # Replace with function body.
+
+
+func _on_agguato_timeout() -> void:
+	var closest = get_closest_erbide()
+	if closest:
+		var direction = closest.global_position - global_position
+		var movement = direction.normalized()
+		velocity = movement * speed * 10
+	move_and_collide(velocity)

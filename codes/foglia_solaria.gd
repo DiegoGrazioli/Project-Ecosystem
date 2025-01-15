@@ -29,8 +29,8 @@ func _process(delta: float) -> void:
 func _on_timer_timeout() -> void:
 	age += 1
 	if growth:
-		$Skin.scale.x += 2
-		$Skin.scale.y += 2
+		$Skin.scale.x += 3
+		$Skin.scale.y += 3
 	
 	if $Skin.scale.x >= 12:
 		growth = false

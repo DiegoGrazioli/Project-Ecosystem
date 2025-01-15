@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://d3w4f7evryh6c"]
 
 [ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_50fmp"]
-[ext_resource type="Script" path="res://scenes/funghinoide.gd" id="1_u0io2"]
+[ext_resource type="Script" path="res://codes/funghinoide.gd" id="1_u0io2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5s4t1"]
 
