@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://durkj4pqe32di"]
+[gd_scene load_steps=11 format=3 uid="uid://durkj4pqe32di"]
 
 [ext_resource type="Texture2D" uid="uid://dvdg5vvj8axhd" path="res://src/images/Pixel.png" id="1_e6t7s"]
 [ext_resource type="Script" path="res://codes/world.gd" id="1_y73rv"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://daoryq86wit4j" path="res://scenes/solaria.tscn" id="5_wjah2"]
 [ext_resource type="PackedScene" uid="uid://d3naq81glx47c" path="res://scenes/carnide.tscn" id="6_gb27n"]
 [ext_resource type="PackedScene" uid="uid://d3w4f7evryh6c" path="res://scenes/funghinoide.tscn" id="6_s2i1y"]
+[ext_resource type="PackedScene" uid="uid://dv7615ux4is5u" path="res://scenes/terminaria.tscn" id="8_ebij0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vqlf4"]
 size = Vector2(101561, 879)
@@ -56,7 +57,7 @@ position = Vector2(10346, 5280)
 position = Vector2(10391, 5172)
 
 [node name="Erbide3" parent="." instance=ExtResource("4_4r32y")]
-position = Vector2(10270, 5197)
+position = Vector2(9814, 5107)
 
 [node name="Solaria" parent="." instance=ExtResource("5_wjah2")]
 position = Vector2(10860, 5396)
@@ -65,7 +66,7 @@ position = Vector2(10860, 5396)
 position = Vector2(10772, 5521)
 
 [node name="Carnide2" parent="." instance=ExtResource("6_gb27n")]
-position = Vector2(10504, 5436)
+position = Vector2(10484, 5440)
 
 [node name="Carnide3" parent="." instance=ExtResource("6_gb27n")]
 position = Vector2(10687, 5330)
@@ -96,6 +97,9 @@ shape = SubResource("RectangleShape2D_ib281")
 
 [node name="Funghinoide" parent="." instance=ExtResource("6_s2i1y")]
 position = Vector2(10754, 5141)
+
+[node name="Terminaria" parent="." instance=ExtResource("8_ebij0")]
+position = Vector2(9622, 5090)
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="Timer" to="Camera2D/UI" method="_on_timer_timeout"]

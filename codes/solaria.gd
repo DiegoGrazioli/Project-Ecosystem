@@ -25,7 +25,6 @@ func _process(delta: float) -> void:
 		var foglia = foglia_solaria.instantiate()
 		var foglia_pos = Vector2(randi_range(-16, 16), randi_range(-16, 16))
 		foglia.position = foglia_pos
-		foglia.predisposition = foglia_pos
 		$Leaves.add_child(foglia)
 		leaves += 1
 	

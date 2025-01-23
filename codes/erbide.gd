@@ -184,21 +184,21 @@ func _on_hover_mouse_exited() -> void:
 
 
 func _on_area_2d_body_entered(body: Node2D) -> void:
-	if body is foglia:
+	if body is foglia or body is foglia2:
 		vegetables_in_area.append(body)
 	if body is erbide and body.gender != gender and body.secs:
 		hot_erbidi_in_area.append(body)
 
 
 func _on_area_2d_body_exited(body: Node2D) -> void:
-	if body is foglia:
+	if body is foglia or body is foglia2:
 		vegetables_in_area.erase(body)
 	if body is erbide:
 		hot_erbidi_in_area.erase(body)
 
 
 func _on_eat_area_body_entered(body: Node2D) -> void:
-	if body is foglia and hungry:
+	if (body is foglia or body is foglia2) and hungry:
 		vegetables_in_area.erase(body)
 		$EatArea/Cooldown.start()
 		if body.pollins:
